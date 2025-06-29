@@ -14,13 +14,9 @@ class GameBoard {
   // Prints the board
   printBoard() {}
 
-
-  // Determine if all ships are sunk 
+  // Determine if all ships are sunk
   // Returns true if all ships sunk & false if not
-  gameOver(){
-
-  }
-
+  gameOver() {}
 
   // Places a ship in the coordinates
   // Returns true if placed & false if coordinate is occupied
@@ -30,3 +26,5 @@ class GameBoard {
   // Returns true if hit and false if missed
   attackShip(x, y) {}
 }
+
+export { GameBoard };
