@@ -6,14 +6,16 @@ class Ship {
   }
 
   hit() {
-    this.hit += 1;
+    this.hit_ += 1;
 
+    //console.log(this.hit_)
     this.isSunk();
   }
 
   isSunk() {
-    if (this.hit >= this.length) {
-      this.sunk = false;
+    if (this.hit_ >= this.length_) {
+      this.sunk_ = false;
+      //console.log("SANK");
     }
   }
 }
