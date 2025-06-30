@@ -1,15 +1,15 @@
 class Player {
   constructor() {
-    this.type = null;
-    this.gameBoard = null;
+    this.type_ = null;
+    this.gameBoard_ = null;
   }
 
   get type() {
-    return this.type;
+    return this.type_;
   }
 
   get board() {
-    return this.gameBoard;
+    return this.gameBoard_;
   }
 
   set type(newType) {
@@ -17,7 +17,7 @@ class Player {
   }
 
   set board(newBoard) {
-    this.type = newBoard;
+    this.gameBoard_ = newBoard;
   }
 }
 

@@ -1,9 +1,9 @@
-import { Ship } from "./ship";
+import { Ship } from "./ship.js";
 
 class GameBoard {
   constructor() {
-    this.rows = 8;
-    this.cols = 8;
+    this.rows_ = 8;
+    this.cols_ = 8;
 
     this.board = this.createBoard(this.rows, this.cols);
 
@@ -14,9 +14,9 @@ class GameBoard {
   createBoard() {
     const board = [];
 
-    for (let i = 0; i < this.cols; i++) {
+    for (let i = 0; i < this.cols_; i++) {
       board[i] = [];
-      for (let j = 0; j < this.rows; j++) {
+      for (let j = 0; j < this.rows_; j++) {
         board[i][j] = [];
       }
     }
@@ -27,9 +27,9 @@ class GameBoard {
   // Prints the board
   printBoard() {
     console.log("\n\n\n");
-    for (let i = 0; i < this.cols; i++) {
+    for (let i = 0; i < this.cols_; i++) {
       var temp = "";
-      for (let j = 0; j < this.rows; j++) {
+      for (let j = 0; j < this.rows_; j++) {
         const square = this.board[i][j];
         if (square instanceof Ship) {
           temp += "AAA";
@@ -44,8 +44,8 @@ class GameBoard {
   // Determine if all ships are sunk
   // Returns true if all ships sunk & false if not
   gameOver() {
-    for (let i = 0; i < this.cols; i++) {
-      for (let j = 0; j < this.rows; j++) {
+    for (let i = 0; i < this.cols_; i++) {
+      for (let j = 0; j < this.rows_; j++) {
         const square = this.board[i][j];
         if (square instanceof Ship && !square.isSunk()) {
           return false;
@@ -67,14 +67,37 @@ class GameBoard {
     return true;
   }
 
+  getShip(x, y) {
+    if (this.board[x][y] instanceof Ship) {
+      return this.board[x][y];
+    }
+    return null;
+  }
+
   // Receive apair of coordinates and sends the hit function of the ship or coordinates of the missed shot
   // Returns true if hit and false if missed
   attackShip(x, y) {
     if (this.board[x][y] instanceof Ship) {
-        this.board[x][y].hit();
+      this.board[x][y].hit();
       return true;
     }
-    return false
+    return false;
+  }
+
+  get rows() {
+    return this.rows_;
+  }
+
+  get cols() {
+    return this.cols_;
+  }
+
+  set rows(newRow) {
+    this.rows = newRow_;
+  }
+
+  set cols(newCol) {
+    this.cols = newCol_;
   }
 }
 
