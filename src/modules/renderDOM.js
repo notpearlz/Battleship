@@ -1,14 +1,13 @@
 import { GameBoard } from "./gameBoard.js";
 
-function render(board1, board2) {
-  const player1 = document.getElementById("player1");
-  const player2 = document.getElementById("player2");
+function render(board) {
+  const player = document.getElementById("player");
 
-  createBoard(player1, board1);
-  createBoard(player2, board2);
+  createBoard(player, board);
 }
 
 function createBoard(player, board) {
+  player.innerHTML = "";
   const rows = board.rows;
   const cols = board.cols;
 
