@@ -58,6 +58,7 @@ class GameBoard {
 
   // Places a ship in the coordinates
   // Returns true if placed & false if coordinate is occupied
+  // x = row, y = col
   placeShip(x, y) {
     if (this.board[x][y] instanceof Ship) {
       return false;
@@ -67,6 +68,7 @@ class GameBoard {
     return true;
   }
 
+  // x = row, y = col
   getShip(x, y) {
     if (this.board[x][y] instanceof Ship) {
       return this.board[x][y];
@@ -76,6 +78,7 @@ class GameBoard {
 
   // Receive apair of coordinates and sends the hit function of the ship or coordinates of the missed shot
   // Returns true if hit and false if missed
+  // x = row, y = col
   attackShip(x, y) {
     if (this.board[x][y] instanceof Ship) {
       this.board[x][y].hit();
