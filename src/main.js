@@ -12,24 +12,15 @@ const battleship = function () {
   player1.board = board1;
   player2.board = board2;
 
-  board1.placeShip(0, 0);
   var curPlayer = player1;
 
+  // Ships to place for each player
+  var phase = 1;
+
   const startGame = function () {
-    // Ships to place for each player
-    const ships = 1;
-    const shipsPlaced = 0;
+    render(curPlayer.board);
 
     //Placing ships phase
-    for (let i = 0; i < ships; i++) {
-      //place ships through buttons here
-      const colInput = 1;
-      const rowInput = 2;
-
-      curPlayer.board.placeShip(colInput, rowInput);
-
-      render(curPlayer.board);
-    }
 
     //Attacking ships phase
     // while (!board1.gameOver() || !board2.gameOver()) {
@@ -45,14 +36,22 @@ const battleship = function () {
   };
 
   const swapBoard = function () {
+
     curPlayer = curPlayer == player1 ? player2 : player1;
     render(curPlayer.board);
   };
 
-  return { startGame, swapBoard };
+  const getPhase = function () {
+    return phase;
+  };
+
+  const addPhase = function () {
+    phase += 1;
+  };
+  return { startGame, swapBoard, getPhase, addPhase };
 };
 
 const game = battleship();
 game.startGame();
 
-export const { swapBoard } = game;
+export const { swapBoard, getPhase, addPhase } = game;

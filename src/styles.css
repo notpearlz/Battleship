@@ -5,6 +5,7 @@
 
 main {
   display: flex;
+  flex-direction: column;
 
   gap: 50px;
   padding: 10px;
@@ -13,7 +14,7 @@ main {
 .board {
   display: grid;
 
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(8, 50px);
 }
 
 .square {

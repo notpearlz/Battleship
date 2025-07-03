@@ -7,7 +7,10 @@ class GameBoard {
 
     this.board = this.createBoard(this.rows, this.cols);
 
-    this.missed = 0;
+    this.maxShips_ = 8;
+
+    this.curShips_ = 0;
+    this.missed_ = 0;
   }
   // Create Board
   // Returns board
@@ -60,11 +63,15 @@ class GameBoard {
   // Returns true if placed & false if coordinate is occupied
   // x = row, y = col
   placeShip(x, y) {
+    if(this.curShips_ >= this.maxShips_){
+      return false;
+    }
     if (this.board[x][y] instanceof Ship) {
       return false;
     }
 
     this.board[x][y] = new Ship();
+    this.curShips_ ++;
     return true;
   }
 
@@ -87,6 +94,7 @@ class GameBoard {
     return false;
   }
 
+
   get rows() {
     return this.rows_;
   }
@@ -95,12 +103,24 @@ class GameBoard {
     return this.cols_;
   }
 
+  get maxShips() {
+    return this.maxShips_;
+  }
+
+  get curShips() {
+    return this.curShips_;
+  }
+
+  get missed() {
+    return this.missed_;
+  }
+
   set rows(newRow) {
-    this.rows = newRow_;
+    this.rows_ = newRow;
   }
 
   set cols(newCol) {
-    this.cols = newCol_;
+    this.cols_ = newCol;
   }
 }
 
