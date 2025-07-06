@@ -1,25 +1,36 @@
 import { GameBoard } from "./gameBoard.js";
-import { swapBoard } from "../main.js";
-import { getPhase } from "../modules/gameState.js";
+import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
+import { game } from "./battleship.js";
 
 const swap = (function () {
   const swapBtn = document.getElementById("swap");
 
   swapBtn.addEventListener("click", () => {
-    swapBoard();
+    game.swapBoard();
   });
 })();
 
 function updatePhase() {
   const phase = document.getElementById("phase");
 
-  const p = getPhase();
+  var p = getPhase();
   if (p == 0) {
     phase.innerHTML = "Not started";
+    if (true) {
+      //started
+      addPhase();
+    }
   } else if (p == 1) {
     phase.innerHTML = "Placing Ships";
-  } else if (i == 2) {
+    if (placedAllShips(game.getBoards())) {
+      addPhase();
+    }
+  } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
+  }
+
+  if (p != getPhase()) {
+    updatePhase();
   }
 }
 

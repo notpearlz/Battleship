@@ -7,7 +7,10 @@ class GameBoard {
 
     this.board = this.createBoard(this.rows, this.cols);
 
-    this.maxShips_ = 8;
+
+    //MAX SHIPS
+    this.maxShips_ = 3;
+
 
     this.curShips_ = 0;
     this.missed_ = 0;
@@ -94,6 +97,10 @@ class GameBoard {
     return false;
   }
 
+
+  hasMaxShips(){
+    return this.maxShips_ === this.curShips_;
+  }
 
   get rows() {
     return this.rows_;
