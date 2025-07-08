@@ -2,11 +2,13 @@ import { GameBoard } from "./gameBoard.js";
 import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
+var turn = true;
 const swap = (function () {
   const swapBtn = document.getElementById("swap");
 
   swapBtn.addEventListener("click", () => {
     game.swapBoard();
+    turn = true;
   });
 })();
 
@@ -35,18 +37,19 @@ function updatePhase() {
 }
 
 function renderConsole(board) {
-  const console = document.getElementById("console");
+  const gameConsole = document.getElementById("console");
 
   const maxShips = board.maxShips;
   const shipsToPlace = maxShips - board.curShips;
 
   const phase = getPhase();
+
   if (phase == 0) {
-    console.innerHTML = "Not started";
+    gameConsole.innerHTML = "Not started";
   } else if (phase == 1) {
-    console.innerHTML = "Ships to place: " + shipsToPlace;
+    gameConsole.innerHTML = "Ships to place: " + shipsToPlace;
   } else if (phase == 2) {
-    console.innerHTML = "Ships remaining: " + board.curShips;
+    gameConsole.innerHTML = "Ships remaining: " + board.curShips;
   }
 }
 
@@ -58,6 +61,13 @@ function render(board) {
 
 function clickSquare(board, row, col) {
   const phase = getPhase();
+
+  if (!turn) {
+    console.log("not your turn");
+
+    return;
+  }
+
   if (phase == 1) {
     board.placeShip(row, col);
   } else if (phase == 2) {
@@ -66,6 +76,7 @@ function clickSquare(board, row, col) {
     } else {
       console.log("MISS");
     }
+    turn = false;
   }
 
   createBoard(player, board);
@@ -89,7 +100,7 @@ function createBoard(player, board) {
       // Fill out ships
 
       if (board.getShip(i, j)) {
-        if (board.getShip(i,j).sunk == true) {
+        if (board.getShip(i, j).sunk == true) {
           square.innerHTML = "HIT";
         } else {
           square.innerHTML = "SHIP";
