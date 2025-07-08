@@ -34,13 +34,20 @@ function updatePhase() {
   }
 }
 
-function shipsToPlace(board) {
-  const shipsToPlace = document.getElementById("ships-to-place");
+function renderConsole(board) {
+  const console = document.getElementById("console");
 
   const maxShips = board.maxShips;
-  const remaining = maxShips - board.curShips;
+  const shipsToPlace = maxShips - board.curShips;
 
-  shipsToPlace.innerHTML = remaining;
+  const phase = getPhase();
+  if (phase == 0) {
+    console.innerHTML = "Not started";
+  } else if (phase == 1) {
+    console.innerHTML = "Ships to place: " + shipsToPlace;
+  } else if (phase == 2) {
+    console.innerHTML = "Ships remaining: " + board.curShips;
+  }
 }
 
 function render(board) {
@@ -50,8 +57,15 @@ function render(board) {
 }
 
 function clickSquare(board, row, col) {
-  if (getPhase() == 1) {
+  const phase = getPhase();
+  if (phase == 1) {
     board.placeShip(row, col);
+  } else if (phase == 2) {
+    if (board.attackShip(row, col)) {
+      console.log("HIT");
+    } else {
+      console.log("MISS");
+    }
   }
 
   createBoard(player, board);
@@ -61,7 +75,7 @@ function createBoard(player, board) {
   updatePhase();
   for (let i = 0; i < board.rows; i++) {
     for (let j = 0; j < board.cols; j++) {
-      shipsToPlace(board);
+      renderConsole(board);
       const square = document.createElement("button");
 
       // apply cols & rows data attribute
@@ -73,8 +87,13 @@ function createBoard(player, board) {
       });
 
       // Fill out ships
+
       if (board.getShip(i, j)) {
-        square.innerHTML = "SHIP";
+        if (board.getShip(i,j).sunk == true) {
+          square.innerHTML = "HIT";
+        } else {
+          square.innerHTML = "SHIP";
+        }
       } else {
         square.innerHTML = "____";
       }
