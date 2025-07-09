@@ -2,16 +2,26 @@ import { GameBoard } from "./gameBoard.js";
 import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
-var turn = true;
+var turn = null;
 const swap = (function () {
   const swapBtn = document.getElementById("swap");
 
   swapBtn.addEventListener("click", () => {
     game.swapBoard();
     turn = true;
+    updateTurn();
   });
 })();
 
+function updateTurn() {
+  const turnConsole = document.getElementById("turn");
+
+  if (turn && getPhase() == 2) {
+    turnConsole.innerHTML = "Its your turn";
+  } else if(turn == false  && getPhase() == 2){
+    turnConsole.innerHTML = "Not your turn";
+  }
+}
 function updatePhase() {
   const phase = document.getElementById("phase");
 
@@ -26,6 +36,7 @@ function updatePhase() {
     phase.innerHTML = "Placing Ships";
     if (placedAllShips(game.getBoards())) {
       addPhase();
+      updateTurn();
     }
   } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
@@ -62,11 +73,7 @@ function render(board) {
 function clickSquare(board, row, col) {
   const phase = getPhase();
 
-  if (!turn) {
-    console.log("not your turn");
-
-    return;
-  }
+  if (turn == false) return;
 
   if (phase == 1) {
     board.placeShip(row, col);
@@ -77,6 +84,7 @@ function clickSquare(board, row, col) {
       console.log("MISS");
     }
     turn = false;
+    updateTurn();
   }
 
   createBoard(player, board);
