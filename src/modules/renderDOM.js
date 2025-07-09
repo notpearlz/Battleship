@@ -3,23 +3,26 @@ import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
 var turn = null;
-const swap = (function () {
-  const swapBtn = document.getElementById("swap");
 
-  swapBtn.addEventListener("click", () => {
-    game.swapBoard();
-    turn = true;
-    updateTurn();
-  });
-})();
+const swapBtn = document.getElementById("swap");
 
-function updateTurn() {
+swapBtn.addEventListener("click", () => {
+  game.swapBoard();
+  console.log(turn);
+});
+
+function updateTurn(board) {
   const turnConsole = document.getElementById("turn");
 
-  if (turn && getPhase() == 2) {
-    turnConsole.innerHTML = "Its your turn";
-  } else if(turn == false  && getPhase() == 2){
+  if (!turn) {
     turnConsole.innerHTML = "Not your turn";
+    if (board == game.getPlayers()[0].board) {
+      turnConsole.innerHTML = game.getPlayers()[1].name + "'s turn";
+    } else {
+      turnConsole.innerHTML = game.getPlayers()[0].name + "'s turn";
+    }
+  } else if (turn.board == board) {
+    turnConsole.innerHTML = game.getCurPlayer().name + "'s turn";
   }
 }
 function updatePhase() {
@@ -36,7 +39,6 @@ function updatePhase() {
     phase.innerHTML = "Placing Ships";
     if (placedAllShips(game.getBoards())) {
       addPhase();
-      updateTurn();
     }
   } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
@@ -67,24 +69,30 @@ function renderConsole(board) {
 function render(board) {
   const player = document.getElementById("player");
 
+  turn = game.getCurPlayer();
+  updateTurn(board);
   createBoard(player, board);
 }
 
 function clickSquare(board, row, col) {
   const phase = getPhase();
 
-  if (turn == false) return;
+  if (game.getCurPlayer().board != board) {
+    updateTurn(board);
+    return;
+  }
 
   if (phase == 1) {
     board.placeShip(row, col);
-  } else if (phase == 2) {
+  } else if (phase == 2 && game.getCurPlayer().board == board && turn != null) {
     if (board.attackShip(row, col)) {
       console.log("HIT");
     } else {
       console.log("MISS");
     }
-    turn = false;
-    updateTurn();
+
+    turn = null;
+    updateTurn(board);
   }
 
   createBoard(player, board);
@@ -92,6 +100,8 @@ function clickSquare(board, row, col) {
 function createBoard(player, board) {
   player.innerHTML = "";
   updatePhase();
+  updateTurn(board);
+
   for (let i = 0; i < board.rows; i++) {
     for (let j = 0; j < board.cols; j++) {
       renderConsole(board);

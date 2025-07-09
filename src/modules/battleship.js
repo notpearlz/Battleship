@@ -6,6 +6,9 @@ const battleship = function () {
   const player1 = new Player();
   const player2 = new Player();
 
+  player1.name = "Player1";
+  player2.name = "Player2";
+
   const board1 = new GameBoard();
   const board2 = new GameBoard();
 
@@ -41,7 +44,15 @@ const battleship = function () {
     render(curPlayer.board);
   };
 
-  return { startGame, swapBoard, getBoards };
+  const getCurPlayer = function () {
+    return curPlayer;
+  };
+
+  const getPlayers = function () {
+    return [player1, player2];
+  };
+
+  return { startGame, swapBoard, getBoards, getCurPlayer, getPlayers };
 };
 const game = new battleship();
 
