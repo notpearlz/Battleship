@@ -2,13 +2,21 @@ import { GameBoard } from "./gameBoard.js";
 import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
+var curboard = null;
 var turn = null;
 
 const swapBtn = document.getElementById("swap");
+const currentBoard = document.getElementById("currentBoard");
 
 swapBtn.addEventListener("click", () => {
+  const players = game.getPlayers();
+  console.log(players)
+  if (curboard == players[0].board) {
+    currentBoard.innerHTML = players[0].name + "'s board";
+  } else {
+    currentBoard.innerHTML = players[1].name + "'s board";
+  }
   game.swapBoard();
-  console.log(turn);
 });
 
 function updateTurn(board) {
@@ -69,6 +77,7 @@ function renderConsole(board) {
 function render(board) {
   const player = document.getElementById("player");
 
+  curboard = board;
   turn = game.getCurPlayer();
   updateTurn(board);
   createBoard(player, board);
