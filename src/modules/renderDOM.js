@@ -3,34 +3,35 @@ import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
 var curboard = null;
-var turn = null;
 
 const swapBtn = document.getElementById("swap");
 const currentBoard = document.getElementById("currentBoard");
 
 swapBtn.addEventListener("click", () => {
-  const players = game.getPlayers();
-  console.log(players)
-  if (curboard == players[0].board) {
-    currentBoard.innerHTML = players[0].name + "'s board";
-  } else {
-    currentBoard.innerHTML = players[1].name + "'s board";
-  }
   game.swapBoard();
 });
 
 function updateTurn(board) {
   const turnConsole = document.getElementById("turn");
 
-  if (!turn) {
+  const players = game.getPlayers();
+  const turn = game.getTurn();
+
+  if (turn.board !== board) {
     turnConsole.innerHTML = "Not your turn";
-    if (board == game.getPlayers()[0].board) {
-      turnConsole.innerHTML = game.getPlayers()[1].name + "'s turn";
+    if (board == players[0].board) {
+      turnConsole.innerHTML = players[1].name + "'s turn";
     } else {
-      turnConsole.innerHTML = game.getPlayers()[0].name + "'s turn";
+      turnConsole.innerHTML = players[0].name + "'s turn";
     }
-  } else if (turn.board == board) {
+  } else if (turn.board === board) {
     turnConsole.innerHTML = game.getCurPlayer().name + "'s turn";
+  }
+
+  if (curboard == players[0].board) {
+    currentBoard.innerHTML = players[0].name + "'s board";
+  } else {
+    currentBoard.innerHTML = players[1].name + "'s board";
   }
 }
 function updatePhase() {
@@ -78,7 +79,6 @@ function render(board) {
   const player = document.getElementById("player");
 
   curboard = board;
-  turn = game.getCurPlayer();
   updateTurn(board);
   createBoard(player, board);
 }
@@ -86,21 +86,22 @@ function render(board) {
 function clickSquare(board, row, col) {
   const phase = getPhase();
 
-  if (game.getCurPlayer().board != board) {
+  const curPlayer = game.getCurPlayer();
+  if (curPlayer.board != board) {
     updateTurn(board);
     return;
   }
 
   if (phase == 1) {
     board.placeShip(row, col);
-  } else if (phase == 2 && game.getCurPlayer().board == board && turn != null) {
+  } else if (phase == 2 && game.getTurn() == curPlayer) {
     if (board.attackShip(row, col)) {
       console.log("HIT");
     } else {
       console.log("MISS");
     }
 
-    turn = null;
+    game.swapTurn();
     updateTurn(board);
   }
 

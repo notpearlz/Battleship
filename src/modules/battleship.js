@@ -16,7 +16,7 @@ const battleship = function () {
   player2.board = board2;
 
   var curPlayer = player1;
-
+  var curTurn = player1;
   // Ships to place for each player
 
   const startGame = function () {
@@ -52,7 +52,15 @@ const battleship = function () {
     return [player1, player2];
   };
 
-  return { startGame, swapBoard, getBoards, getCurPlayer, getPlayers };
+  const getTurn = function(){
+    return curTurn;
+  }
+
+  const swapTurn = function(){
+    curTurn = curTurn == player1 ? player2 : player1;
+  }
+
+  return { startGame, swapBoard, getBoards, getCurPlayer, getPlayers, getTurn, swapTurn };
 };
 const game = new battleship();
 
