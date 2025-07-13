@@ -86,15 +86,16 @@ function render(board) {
 function clickSquare(board, row, col) {
   const phase = getPhase();
 
-  const curPlayer = game.getCurPlayer();
-  if (curPlayer.board != board) {
-    updateTurn(board);
-    return;
-  }
+  const curTurn = game.getTurn();
 
-  if (phase == 1) {
+
+  if (phase == 1 && curTurn.board == board) {
     board.placeShip(row, col);
-  } else if (phase == 2 && game.getTurn() == curPlayer) {
+    if (board.hasMaxShips()) {
+      game.swapTurn();
+    }
+  } else if (phase == 2 && curTurn.board != board) {
+
     if (board.attackShip(row, col)) {
       console.log("HIT");
     } else {
@@ -130,8 +131,10 @@ function createBoard(player, board) {
       if (board.getShip(i, j)) {
         if (board.getShip(i, j).sunk == true) {
           square.innerHTML = "HIT";
+          square.classList.add("hit");
         } else {
           square.innerHTML = "SHIP";
+          square.classList.add("ship");
         }
       } else {
         square.innerHTML = "____";
