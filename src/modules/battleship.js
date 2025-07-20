@@ -27,12 +27,6 @@ const battleship = function () {
     //   console.log("test");
     // }
 
-    // Game over
-    // if (board1.gameOver()) {
-    //   console.log("player2 wins");
-    // } else if (board2.gameOver()) {
-    //   console.log("player1 wins");
-    // }
   };
 
   const getBoards = function () {
@@ -58,9 +52,17 @@ const battleship = function () {
 
   const swapTurn = function(){
     curTurn = curTurn == player1 ? player2 : player1;
+  } 
+
+  const gameOver = function(){
+    if (board1.gameOver()) {
+      console.log("player2 wins");
+    } else if (board2.gameOver()) {
+      console.log("player1 wins");
+    }
   }
 
-  return { startGame, swapBoard, getBoards, getCurPlayer, getPlayers, getTurn, swapTurn };
+  return { startGame, swapBoard, getBoards, getCurPlayer, getPlayers, getTurn, swapTurn, gameOver };
 };
 const game = new battleship();
 

@@ -51,6 +51,9 @@ function updatePhase() {
     }
   } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
+  } else if (p == 3){
+    phase.innerHTML = "Game Over";
+
   }
 
   if (p != getPhase()) {
@@ -102,8 +105,14 @@ function clickSquare(board, row, col) {
       console.log("MISS");
     }
 
-    game.swapTurn();
-    updateTurn(board);
+    if(board.gameOver()){
+      console.log("Game Over")
+      addPhase()
+    } else {
+      game.swapTurn();
+      updateTurn(board);
+    }
+
   }
 
   createBoard(player, board);
