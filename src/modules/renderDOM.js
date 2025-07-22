@@ -9,6 +9,7 @@ const currentBoard = document.getElementById("currentBoard");
 
 swapBtn.addEventListener("click", () => {
   game.swapBoard();
+  render(game.getCurPlayer().board)
 });
 
 function updateTurn(board) {
@@ -52,8 +53,7 @@ function updatePhase() {
   } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
   } else if (p == 3){
-    phase.innerHTML = "Game Over";
-
+    phase.innerHTML = "Game over: " + game.getCurPlayer().name + " wins!";
   }
 
   if (p != getPhase()) {
@@ -117,15 +117,10 @@ function clickSquare(board, row, col) {
 
   createBoard(player, board);
 }
-function createBoard(player, board) {
-  player.innerHTML = "";
-  updatePhase();
-  updateTurn(board);
 
-  for (let i = 0; i < board.rows; i++) {
-    for (let j = 0; j < board.cols; j++) {
-      renderConsole(board);
-      const square = document.createElement("button");
+
+function displayShip(board, i,j){
+  const square = document.createElement("button");
 
       // apply cols & rows data attribute
       square.setAttribute("data-row", i);
@@ -133,6 +128,9 @@ function createBoard(player, board) {
 
       square.addEventListener("click", () => {
         clickSquare(board, i, j);
+        if(getPhase() == 2 && game.getCurPlayer() == game.getTurn()){
+          game.swapBoard();
+        }
       });
 
       // Fill out ships
@@ -141,13 +139,27 @@ function createBoard(player, board) {
         if (board.getShip(i, j).sunk == true) {
           square.innerHTML = "HIT";
           square.classList.add("hit");
-        } else {
+        } else if(getPhase() == 1 || game.getCurPlayer() == game.getTurn()) {
           square.innerHTML = "SHIP";
           square.classList.add("ship");
+
         }
       } else {
         square.innerHTML = "____";
       }
+      return square;
+}
+function createBoard(player, board) {
+  player.innerHTML = "";
+  updatePhase();
+  updateTurn(board);
+
+  for (let i = 0; i < board.rows; i++) {
+    for (let j = 0; j < board.cols; j++) {
+      renderConsole(board);
+
+      const square = displayShip(board, i,j)
+      
 
       // append to a parent div
       player.append(square);

@@ -90,7 +90,7 @@ class GameBoard {
   // Returns true if hit and false if missed
   // x = row, y = col
   attackShip(x, y) {
-    if (this.board[x][y] instanceof Ship) {
+    if (this.board[x][y] instanceof Ship && !this.board[x][y].isSunk()) {
       this.board[x][y].hit();
       return true;
     }
