@@ -2,15 +2,47 @@ import { GameBoard } from "./gameBoard.js";
 import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
-var curboard = null;
 
-const swapBtn = document.getElementById("swap");
-const currentBoard = document.getElementById("currentBoard");
 
-swapBtn.addEventListener("click", () => {
-  game.swapBoard();
-  render(game.getCurPlayer().board)
-});
+
+
+function mainMenu(baord){
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  
+  const phase = document.createElement("div");
+  phase.setAttribute("id", "phase")
+
+  const console = document.createElement("div");
+  console.setAttribute("id", "console")
+
+  const turn = document.createElement("div");
+  turn.setAttribute("id", "turn")
+
+  const currentBoard = document.createElement("div");
+  currentBoard.setAttribute("id", "currentBoard")
+
+  const board = document.createElement("div");
+  board.classList.add("board");
+  board.setAttribute("id", "player")
+
+  const swapBtn = document.createElement("button");
+  swapBtn.classList.add("swap")
+  swapBtn.innerHTML = "Swap"
+
+  swapBtn.addEventListener("click", () => {
+    game.swapBoard();
+    render(game.getCurPlayer().board)
+  });
+
+  main.append(phase);
+  main.append(console);
+  main.append(turn);
+  main.append(currentBoard);
+  main.append(board);
+  main.append(swapBtn);
+
+}
 
 function updateTurn(board) {
   const turnConsole = document.getElementById("turn");
@@ -29,7 +61,7 @@ function updateTurn(board) {
     turnConsole.innerHTML = game.getCurPlayer().name + "'s turn";
   }
 
-  if (curboard == players[0].board) {
+  if (game.getCurPlayer().board == players[0].board) {
     currentBoard.innerHTML = players[0].name + "'s board";
   } else {
     currentBoard.innerHTML = players[1].name + "'s board";
@@ -41,10 +73,6 @@ function updatePhase() {
   var p = getPhase();
   if (p == 0) {
     phase.innerHTML = "Not started";
-    if (true) {
-      //started
-      addPhase();
-    }
   } else if (p == 1) {
     phase.innerHTML = "Placing Ships";
     if (placedAllShips(game.getBoards())) {
@@ -79,11 +107,11 @@ function renderConsole(board) {
 }
 
 function render(board) {
-  const player = document.getElementById("player");
 
-  curboard = board;
-  updateTurn(board);
-  createBoard(player, board);
+
+  mainMenu();
+  createBoard(board);
+
 }
 
 function clickSquare(board, row, col) {
@@ -93,6 +121,7 @@ function clickSquare(board, row, col) {
 
 
   if (phase == 1 && curTurn.board == board) {
+
     board.placeShip(row, col);
     if (board.hasMaxShips()) {
       game.swapTurn();
@@ -109,13 +138,13 @@ function clickSquare(board, row, col) {
       console.log("Game Over")
       addPhase()
     } else {
-      game.swapTurn();
+      //game.swapTurn();
       updateTurn(board);
     }
 
   }
 
-  createBoard(player, board);
+  createBoard(board);
 }
 
 
@@ -129,7 +158,7 @@ function displayShip(board, i,j){
       square.addEventListener("click", () => {
         clickSquare(board, i, j);
         if(getPhase() == 2 && game.getCurPlayer() == game.getTurn()){
-          game.swapBoard();
+          //game.swapBoard();
         }
       });
 
@@ -149,14 +178,16 @@ function displayShip(board, i,j){
       }
       return square;
 }
-function createBoard(player, board) {
-  player.innerHTML = "";
+function createBoard(board) {
   updatePhase();
   updateTurn(board);
+  renderConsole(board);
+
+  const player = document.getElementById("player");
+  player.innerHTML='';
 
   for (let i = 0; i < board.rows; i++) {
     for (let j = 0; j < board.cols; j++) {
-      renderConsole(board);
 
       const square = displayShip(board, i,j)
       

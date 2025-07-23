@@ -21,12 +21,6 @@ const battleship = function () {
 
   const startGame = function () {
     render(curPlayer.board);
-
-    //Attacking ships phase
-    // while (!board1.gameOver() || !board2.gameOver()) {
-    //   console.log("test");
-    // }
-
   };
 
   const getBoards = function () {
