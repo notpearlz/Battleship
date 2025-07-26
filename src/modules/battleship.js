@@ -29,7 +29,6 @@ const battleship = function () {
 
   const swapBoard = function () {
     curPlayer = curPlayer == player1 ? player2 : player1;
-    render(curPlayer.board);
   };
 
   const getCurPlayer = function () {
@@ -45,7 +44,7 @@ const battleship = function () {
   }
 
   const swapTurn = function(){
-    curTurn = curTurn == player1 ? player2 : player1;
+    curTurn = curPlayer == player1 ? player2 : player1;
   } 
 
   const gameOver = function(){

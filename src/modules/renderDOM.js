@@ -1,20 +1,24 @@
-import { GameBoard } from "./gameBoard.js";
 import { getPhase, addPhase, placedAllShips } from "../modules/gameState.js";
 import { game } from "./battleship.js";
 
 
+let reveal = false;
 
+function swapBoard(){
+  game.swapBoard();
+  game.swapTurn();
+  render(game.getCurPlayer().board)
+}
 
-
-function mainMenu(baord){
+function mainMenu(){
   const main = document.getElementById("main");
   main.innerHTML = "";
   
   const phase = document.createElement("div");
   phase.setAttribute("id", "phase")
 
-  const console = document.createElement("div");
-  console.setAttribute("id", "console")
+  const consolediv = document.createElement("div");
+  consolediv.setAttribute("id", "console")
 
   const turn = document.createElement("div");
   turn.setAttribute("id", "turn")
@@ -26,46 +30,43 @@ function mainMenu(baord){
   board.classList.add("board");
   board.setAttribute("id", "player")
 
-  const swapBtn = document.createElement("button");
-  swapBtn.classList.add("swap")
-  swapBtn.innerHTML = "Swap"
+  const swapboardBtn = document.createElement("button");
+  swapboardBtn.classList.add("swap-boards")
+  swapboardBtn.innerHTML = "Swap Boards"
+  swapboardBtn.addEventListener("click", () => {
+    swapBoard();
+  });
 
-  swapBtn.addEventListener("click", () => {
-    game.swapBoard();
+  const showShipsBtn = document.createElement("button");
+  showShipsBtn.classList.add("swap-boards")
+  showShipsBtn.innerHTML = "Reveal Ships"
+  showShipsBtn.addEventListener("click", () => {
+    reveal = reveal == true ? false : true;
     render(game.getCurPlayer().board)
   });
 
+
+
+
   main.append(phase);
-  main.append(console);
+  main.append(consolediv);
   main.append(turn);
   main.append(currentBoard);
   main.append(board);
-  main.append(swapBtn);
+  main.append(swapboardBtn);
+  main.append(showShipsBtn);
 
 }
 
 function updateTurn(board) {
   const turnConsole = document.getElementById("turn");
 
-  const players = game.getPlayers();
   const turn = game.getTurn();
 
-  if (turn.board !== board) {
-    turnConsole.innerHTML = "Not your turn";
-    if (board == players[0].board) {
-      turnConsole.innerHTML = players[1].name + "'s turn";
-    } else {
-      turnConsole.innerHTML = players[0].name + "'s turn";
-    }
-  } else if (turn.board === board) {
-    turnConsole.innerHTML = game.getCurPlayer().name + "'s turn";
-  }
+  turnConsole.innerHTML = turn.name + "'s turn";
 
-  if (game.getCurPlayer().board == players[0].board) {
-    currentBoard.innerHTML = players[0].name + "'s board";
-  } else {
-    currentBoard.innerHTML = players[1].name + "'s board";
-  }
+  currentBoard.innerHTML = game.getCurPlayer().name + "'s board";
+
 }
 function updatePhase() {
   const phase = document.getElementById("phase");
@@ -81,7 +82,7 @@ function updatePhase() {
   } else if (p == 2) {
     phase.innerHTML = "Attacking Ships";
   } else if (p == 3){
-    phase.innerHTML = "Game over: " + game.getCurPlayer().name + " wins!";
+    phase.innerHTML = "Game over: " + game.getTurn().name + " wins!";
   }
 
   if (p != getPhase()) {
@@ -108,7 +109,6 @@ function renderConsole(board) {
 
 function render(board) {
 
-
   mainMenu();
   createBoard(board);
 
@@ -116,39 +116,31 @@ function render(board) {
 
 function clickSquare(board, row, col) {
   const phase = getPhase();
-
   const curTurn = game.getTurn();
 
-
-  if (phase == 1 && curTurn.board == board) {
-
+  if (phase == 1) {
     board.placeShip(row, col);
-    if (board.hasMaxShips()) {
-      game.swapTurn();
-    }
-  } else if (phase == 2 && curTurn.board != board) {
-
+    createBoard(board); // Only redraw this player's board
+    return;
+  }else if (phase == 2 && curTurn.board !== board) {
     if (board.attackShip(row, col)) {
       console.log("HIT");
     } else {
       console.log("MISS");
     }
 
-    if(board.gameOver()){
-      console.log("Game Over")
-      addPhase()
-    } else {
-      //game.swapTurn();
-      updateTurn(board);
-    }
+    if (board.gameOver()) {
+      addPhase();
+      updatePhase();
 
+    } 
+    render(game.getCurPlayer().board); 
   }
-
-  createBoard(board);
 }
 
 
 function displayShip(board, i,j){
+
   const square = document.createElement("button");
 
       // apply cols & rows data attribute
@@ -157,9 +149,6 @@ function displayShip(board, i,j){
 
       square.addEventListener("click", () => {
         clickSquare(board, i, j);
-        if(getPhase() == 2 && game.getCurPlayer() == game.getTurn()){
-          //game.swapBoard();
-        }
       });
 
       // Fill out ships
@@ -168,7 +157,8 @@ function displayShip(board, i,j){
         if (board.getShip(i, j).sunk == true) {
           square.innerHTML = "HIT";
           square.classList.add("hit");
-        } else if(getPhase() == 1 || game.getCurPlayer() == game.getTurn()) {
+        } else if(getPhase() == 1 || reveal) {
+
           square.innerHTML = "SHIP";
           square.classList.add("ship");
 
