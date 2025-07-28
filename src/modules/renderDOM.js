@@ -142,7 +142,7 @@ function clickSquare(board, row, col) {
 function displayShip(board, i,j){
 
   const square = document.createElement("button");
-
+  square.classList.add("square")
       // apply cols & rows data attribute
       square.setAttribute("data-row", i);
       square.setAttribute("data-column", j);

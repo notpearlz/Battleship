@@ -7,16 +7,45 @@ main {
   display: flex;
   flex-direction: column;
 
-  gap: 50px;
   padding: 10px;
+}
+
+#phase {
+  display: flex;
+  justify-content: center;
+  border: black, 1px, solid;
+  padding: 3px;
+}
+
+
+#console {
+  display: flex;
+  justify-content: center;
+  border: black, 1px, solid;
+  padding: 3px;
+}
+
+
+#turn {
+  display: flex;
+  justify-content: center;
+  border: black, 1px, solid;
+  padding: 3px;
+}
+
+#currentBoard {
+  display: flex;
+  justify-content: center;
+  border: black, 1px, solid;
+  padding: 3px;
 }
 
 .board {
   display: grid;
 
-  grid-template-columns: repeat(8, 50px);
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .square {
-    
+    height: 50px;
 }
