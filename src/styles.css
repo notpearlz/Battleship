@@ -1,19 +1,39 @@
+:root{
+  --primarycolor: aliceblue;
+}
+
 * {
   padding: 0;
   margin: 0;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url("./assets/water.webp");
+
+}
+header {
+  display: flex;
+  justify-content: center;
+  border-bottom: black 1px solid;
+  background-color: var(--primarycolor);
+  width: 100%;
+  padding: 10px 0;
+}
 main {
   display: flex;
   flex-direction: column;
 
+
   padding: 10px;
+  width: 1000px;
 }
 
 #phase {
   display: flex;
   justify-content: center;
-  border: black, 1px, solid;
   padding: 3px;
 }
 
@@ -21,7 +41,6 @@ main {
 #console {
   display: flex;
   justify-content: center;
-  border: black, 1px, solid;
   padding: 3px;
 }
 
@@ -29,15 +48,17 @@ main {
 #turn {
   display: flex;
   justify-content: center;
-  border: black, 1px, solid;
   padding: 3px;
 }
 
 #currentBoard {
   display: flex;
   justify-content: center;
+  margin-top: 30px;
   border: black, 1px, solid;
   padding: 3px;
+  background-color: var(--primarycolor);
+
 }
 
 .board {

@@ -162,6 +162,9 @@ function displayShip(board, i,j){
           square.innerHTML = "SHIP";
           square.classList.add("ship");
 
+        } else {
+          square.innerHTML = "____";
+
         }
       } else {
         square.innerHTML = "____";
