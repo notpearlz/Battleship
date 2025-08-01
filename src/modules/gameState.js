@@ -1,5 +1,5 @@
 function gameState() {
-  var phase = 0;
+  var phase = 1;
 
   const getPhase = function () {
     return phase;

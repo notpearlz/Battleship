@@ -21,12 +21,6 @@ const battleship = function () {
 
   const startGame = function () {
     render(curPlayer.board);
-
-    //Attacking ships phase
-    // while (!board1.gameOver() || !board2.gameOver()) {
-    //   console.log("test");
-    // }
-
   };
 
   const getBoards = function () {
@@ -35,7 +29,6 @@ const battleship = function () {
 
   const swapBoard = function () {
     curPlayer = curPlayer == player1 ? player2 : player1;
-    render(curPlayer.board);
   };
 
   const getCurPlayer = function () {
@@ -51,7 +44,7 @@ const battleship = function () {
   }
 
   const swapTurn = function(){
-    curTurn = curTurn == player1 ? player2 : player1;
+    curTurn = curPlayer == player1 ? player2 : player1;
   } 
 
   const gameOver = function(){
